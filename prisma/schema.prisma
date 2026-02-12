@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String  @id @default(uuid()) @db.Uuid
+  email     String  @unique
+  name      String?
+  avatarUrl String? @map("avatar_url")
+
+  accounts Account[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  settings UserSettings?
+
+
+  @@map("User")
+}
+
+model UserSettings {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @unique @map("user_id")
+
+  showWeather  Boolean @default(true) @map("show_weather")
+  showCalendar Boolean @default(true) @map("show_calendar")
+  showNews     Boolean @default(true) @map("show_news")
+
+  observationLocation Json @map("observation_location")
+  followMedia Json @map("follow_media")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("UserSettings")
+}
+
+
+model Account {
+  id             String @id @default(uuid())
+  provider       String
+  providerUserId String @map("provider_user_id")
+
+  accessToken  String  @map("access_token")
+  refreshToken String? @map("refresh_token")
+  expiresAt    Int     @map("expires_at")
+  scope        String?
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@unique([provider, providerUserId], name: "account_provider_user_unique")
+  @@map("Account")
+}
