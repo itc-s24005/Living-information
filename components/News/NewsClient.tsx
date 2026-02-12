@@ -2,13 +2,7 @@
 
 import { useEffect, useMemo, useState, useRef } from "react";
 import { NewsItem } from "../../app/types";
-import NewsImage from "./NewsImage";
-
-type FollowMediaItem = {
-  name: string;
-  domain: string;
-  icon: string;
-};
+import { FollowMediaItem } from "@/app/types";
 
 type Props = {
   wallpaperUrl: [string, string, string, string];
@@ -72,7 +66,9 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, newsList,
 
 
 
-
+  //ーーーーーーーーーーーーーーーー
+  //　　ニューススライドショー
+  //ーーーーーーーーーーーーーーーー
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -112,26 +108,22 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, newsList,
 
 
 
-
-
-
-
-
-
-
-
-
   return (
     <div style={{ display: "flex", flexWrap: "wrap", color: "black" }}>
+
+      {/*ーーーーーーーーーーーーーーーー
+            トップニュースセクション 
+      ーーーーーーーーーーーーーーーー*/}
+
       <div style={{ width: "695px", padding: "15px", height: "380px", margin: "15px 8px", border: "1px solid #808080", borderRadius: "30px", }}>
         <h1 style={{ margin: "6px", fontSize: "22px" }}>トップニュース</h1>
         <div style={{ margin: "10px 0", display: "flex", alignItems: "center"}}>
           <div style={{ width: "387px", marginRight: "16px" }}>
             {newsTop.slice(0, 8).map((news) => {
               return (
-                <div key={news.link + "TOP"} style={{ display: "flex", borderBottom: "1px solid #ccc", paddingBottom: "3px" }}>
+                <div key={news.link + "TOP"} style={{ display: "flex", borderBottom: "1px solid #ccc" }}>
                   <a href={news.link}>
-                    <div style={{ margin: "3.5px 0", display: "flex", alignItems: "center" }}>
+                    <div style={{ margin: "4px 0", display: "flex", alignItems: "center" }}>
                       <img
                           src={news.source_icon ?? "/favicon.ico"}
                           alt="?"
@@ -162,9 +154,9 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, newsList,
 
       </div>
 
-
-
-
+      {/*ーーーーーーーーーーーーーーーー
+            スライドショーセクション 
+      ーーーーーーーーーーーーーーーー*/}
 
       <div
       style={{
@@ -212,7 +204,17 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, newsList,
               {/* --- 1. 画像をウィジェットいっぱいに広げて表示 --- */}
               {news.image_url ? (
                 
-                <NewsImage src={news.image_url} alt={news.title} zen={true} />
+                <img
+                  src={`/api/image?url=${encodeURIComponent(news.image_url ?? "")}`}
+                  alt={news.title}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover", // アスペクト比を維持しつつエリア全体を埋める
+                    border: "none",
+                    display: "block",
+                  }}
+                />
               ) : (
                 // 画像がない場合のダミー表示
                  <div style={{width: "100%", height: "100%", backgroundColor: "#333"}} />
@@ -296,8 +298,9 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, newsList,
 
 
 
-
-
+      {/*ーーーーーーーーーーーーーーーー
+            残りのローカルニュース 
+      ーーーーーーーーーーーーーーーー*/}
 
       {newsLocal.slice(4).map((news) => {
         const domain = new URL(news.link).hostname;
@@ -317,7 +320,16 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, newsList,
             }}
           >
             <a href={news.link}>
-              <NewsImage src={news.image_url} alt={news.title} zen={false} />
+              <img
+                src={`/api/image?url=${encodeURIComponent(news.image_url ?? "")}`}
+                alt={news.title}
+                style={{
+                  width: "360px",
+                  height: "180px",
+                  objectFit: "cover",
+                  borderRadius: "29px 29px 0 0",
+                }}
+              />
               <div style={{ margin: "15px 18px 0" }}>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <img
@@ -382,6 +394,13 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, newsList,
           </div>
         );
       })}
+      
+
+
+      {/*ーーーーーーーーーーーーーーーー
+            お気に入りのニュース
+      ーーーーーーーーーーーーーーーー*/}
+
       {followDomainsList?.map((news) => {
         return (
           <div
@@ -396,7 +415,16 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, newsList,
             }}
           >
             <a href={news.link}>
-              <NewsImage src={news.image_url} alt={news.title} zen={false} />
+              <img
+                src={`/api/image?url=${encodeURIComponent(news.image_url ?? "")}`}
+                alt={news.title}
+                style={{
+                  width: "360px",
+                  height: "180px",
+                  objectFit: "cover",
+                  borderRadius: "29px 29px 0 0",
+                }}
+              />
               <div style={{ margin: "15px 18px 0" }}>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <img

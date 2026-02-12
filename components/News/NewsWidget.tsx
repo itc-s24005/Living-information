@@ -4,9 +4,9 @@ import { FollowMediaItem } from "@/app/types";
 import { getBingWallpaper } from "@/app/types/bing";
 import NewsClient from "./NewsClient";
 
-async function newsio({ text }: { text?: string } = {}, { category }: { category?: string } = {}, { domain }: { domain?: string } = {}) {
+async function newsio({ text }: { text?: string } = {}, { category }: { category?: string } = {}, { domain }: { domain?: string } = {}, { excludedomain }: { excludedomain?: string } = {}) {
   const apiKey = process.env.NEWSDATA_API_KEY!;
-  const url = `https://newsdata.io/api/1/news?apikey=${apiKey}${text}&country=jp&language=ja&removeduplicate=1${category}${domain}&excludedomain=jp.investing.com,topics.smt.docomo.ne.jp&excludefield=ai_summary,ai_org,ai_region,sentiment_stats,sentiment,ai_tag,creator,keywords,source_priority,source_id,video_url,content,source_url,pubdate,pubdatetz`;
+  const url = `https://newsdata.io/api/1/news?apikey=${apiKey}${text}&country=jp&language=ja&removeduplicate=1${category}${domain}`;
 
   const res = await fetch(url, { cache: "no-store" });
   const data = await res.json();
@@ -48,11 +48,10 @@ export default async function NewsWidget() {
 
   /* ニュース取得（例：観測地を使うことも可能） */
   const local: string = observationLocation[0]?.[0] ?? "東京";
-  const newsTop = await newsio({ text: "" }, { category: "&category=top"}, { domain: "" });
-  const newsLocal = await newsio({ text: `&qInTitle=${local}` }, { category: ""}, { domain: "" });
-  //const news2 = await newsio({ text: "&q=アニメ" }, { category: ""},  { domain: "" });
-  const y = await Promise.all(followDomains.map((d) => newsio({ text: "" }, { category: ""},  { domain: `&domainurl=${d}` })));
+  const newsTop = await newsio({ text: "" }, { category: "&category=top"}, { domain: "" }, {excludedomain: "&excludedomain=jp.investing.com,topics.smt.docomo.ne.jp"});
+  const newsLocal = await newsio({ text: `&qInTitle=${local}` }, { category: ""}, { domain: "" }, {excludedomain: "&excludedomain=jp.investing.com,topics.smt.docomo.ne.jp"});
   const newsList = [...newsTop];
+  const y = await Promise.all(followDomains.map((d) => newsio({ text: "" }, { category: ""},  { domain: `&domainurl=${d}` })));
   const followDomainsList = y.flat();
 
   return (
