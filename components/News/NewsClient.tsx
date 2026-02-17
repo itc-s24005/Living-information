@@ -417,6 +417,7 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
       {followDomainsList?.map((news, index) => {
   // 50%の確率で「フルサイズ形式(isFullSize)」にする
   const isFullSize = index % 2 === 0 && index % 5 === 0;
+  const isThisHovered = hoveredIndex === news.link;
 
   if (isFullSize) {
     // --- パターンA: 画像背景のフルサイズ形式 ---
@@ -449,7 +450,11 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
                 height: "100%",
                 objectFit: "cover",
                 display: "block",
+                boxShadow: "0 1px 6px rgba(0,0,0,0.1)",
+                filter: isThisHovered ? "brightness(0.8)" : "none"
               }}
+              onMouseEnter={() => setHoveredIndex(news.link)}
+              onMouseLeave={() => setHoveredIndex(null)}
             />
           ) : (
             <div style={{ width: "100%", height: "100%", backgroundColor: "#333" }} />
@@ -518,7 +523,10 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
           borderRadius: "30px",
           position: "relative",
           overflow: "hidden", // 角丸を画像にも適用させるため
+          boxShadow: isThisHovered ? "0 2px 10px rgba(0,0,0,0.2)" : "0 1px 6px rgba(0,0,0,0.1)"
         }}
+        onMouseEnter={() => setHoveredIndex(news.link)}
+        onMouseLeave={() => setHoveredIndex(null)}
       >
         <a href={news.link} style={{ textDecoration: 'none', color: 'inherit' }}>
           <img
