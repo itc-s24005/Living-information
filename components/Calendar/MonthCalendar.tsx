@@ -188,13 +188,13 @@ export default function MonthCalendar({ events, holidays }: Props) {
 
                     {time && (
                       <div style={{ fontSize: 12, color: "#555" }}>
-                        ⏰ {time}
+                         {time}
                       </div>
                     )}
 
                     {range && (
                       <div style={{ fontSize: 12, color: "#555" }}>
-                        📅 {range}
+                         {range}
                       </div>
                     )}
                   </div>

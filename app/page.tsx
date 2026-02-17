@@ -1,11 +1,12 @@
 import { cookies } from "next/headers";
 import { prisma } from "./lib/prisma";
+import { getBingWallpaper } from "./types/bing";
+import LoginClient from "@/components/LoginClient";
 import CalendarClient from "@/components/Calendar/CalendarClient";
 import GmailBadge from "@/components/GmailBadge";
 import News from "@/components/News/NewsWidget";
 import Weather from "@/components/Weather/WeatherWidget"
 import Popover from "@/components/Popover/Popover";
-import { getBingWallpaper } from "./types/bing";
 
 export const dynamic = "force-dynamic";
 
@@ -17,15 +18,7 @@ export default async function Page() {
   const userId = store.get("user_id")?.value;
 
   if (!userId || (await prisma.user.findUnique({ where: { id: userId } })) === null) {
-    return (
-      <main style={{textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh"}}>
-        <div>
-          <h1 style={{ fontSize: "40px", fontWeight: "bold", textAlign: "center" }}>ようこそ</h1>
-          <p style={{ margin: "15px 0 45px", fontSize: "15px", textAlign: "center" }}>利用するにはGoogleでログインしてください</p>
-          <a href="/api/auth" style={{ padding: "13px", fontSize: "20px", border: "1px solid", borderRadius: "24px", backgroundColor: "#1e90ff", color: "#ffffff", fontWeight: "bold" }}>ログイン</a>
-        </div>
-      </main>
-    )
+    return <LoginClient />
   }
 
   const user = await prisma.user.findUnique({
@@ -58,19 +51,33 @@ export default async function Page() {
           height: "100%",
           zIndex: -1,
           objectFit: "cover",
-          filter: "brightness(0.82)"
+          filter: "brightness(0.9)",
+          WebkitMaskImage: 'linear-gradient(180deg, #ffffff, #ffffff90 80%, transparent)',
+          maskImage: 'linear-gradient(180deg, #ffffff, #ffffff90 80%, transparent)'
         }}
       />
       <div style={{ backgroundImage: "linear-gradient(0deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4) 99%)", display: "flex", alignItems: "center", marginBottom: "150px", padding: "0 30px" }}>
         <img src={"/Gemini_Generated_Image_frlcdrfrlcdrfrlc (1) (1).png"} alt={"logo"} style={{ height: "60px", margin: "20px 0"}} />
-        <div style={{ display: "flex", gap: 8, alignItems: "center", margin: "0 0 0 auto" }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", margin: "0 0 0 auto", }}>
           
           <Popover trigger={<img src={user?.avatarUrl ?? "https://via.placeholder.com/48"} alt={"icon"} style={{ marginRight: "30px", width: "40px", marginLeft: "10px", borderRadius: "50%", cursor: "pointer"}} />}>
-            <div style={{ textAlign: "center", width: "200px" }}>
-              <img src={user?.avatarUrl ?? "https://via.placeholder.com/48"} alt={"icon"} style={{ width: "48px", borderRadius: "50%", cursor: "pointer"}} />
-              <p style={{ margin: "8px 0 0", fontWeight: "bold", color: "black" }}>{user?.name}</p>
-              <a href="/settings" style={{ display: "block", marginTop: "8px", fontSize: "14px", color: "#1e90ff" }}>設定</a>
-              <a href="/api/logout" style={{ display: "block", marginTop: "8px", fontSize: "14px", color: "#1e90ff" }}>ログアウト</a>
+            <div style={{ textAlign: "center", width: "300px" }}>
+              
+              <img src={user?.avatarUrl ?? "https://via.placeholder.com/48"} alt={"icon"} style={{ margin: "auto", width: "60px", borderRadius: "50%", cursor: "pointer"}} />
+              <p style={{ margin: "8px 0 0", color: "black", fontSize: "25px" }}>{user?.name}</p>
+              <p style={{ fontSize: "12px", color: "#666666" }}>{user?.email}</p>
+              <a href="/settings" style={{ display: "block", margin: "12px 15px", padding: "10px", fontSize: "14px", backgroundColor: "#cfcfcfff", color: "black", textDecoration: "none", borderRadius: "40px" }}>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <img src={"/gear_9208286.png"} alt="設定アイコン" style={{ marginRight: "8px", height: "20px"}}/>
+                  設定
+                </div>
+              </a>
+              <a href="/api/logout" style={{ display: "block", margin: "12px 15px", padding: "10px", fontSize: "14px", backgroundColor: "#cfcfcfff", color: "black", textDecoration: "none", borderRadius: "40px" }}>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <img src={"/logout_8669140.png"} alt="ログアウトアイコン" style={{ marginRight: "8px", height: "20px"}}/>
+                  ログアウト
+                </div>
+              </a>
             </div>
           </Popover>
           <a href="https://accounts.google.com/ServiceLogin?hl=ja&service=mail" style={{ display: "flex", gap: 8, alignItems: "center", margin: "0 0 0 auto" }}>
@@ -118,7 +125,7 @@ export default async function Page() {
 
 
 
-      <div style={{ padding: "170px 30px 50px", backgroundImage: "linear-gradient(0deg, #ffffff, #ffffff 87%, transparent)"}}> 
+      <div style={{ padding: "170px 30px 50px"}}> 
         
         {user?.settings?.showWeather && (<Weather /> )}
 

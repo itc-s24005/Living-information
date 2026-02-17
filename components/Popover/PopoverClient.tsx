@@ -31,7 +31,7 @@ export default function PopoverClient({
       <div onClick={() => setOpen(!open)}>{trigger}</div>
 
       {open && (
-        <div style={{ position: "absolute", top: "100%", left: 0, marginTop: "8px", marginLeft: "-170px", borderRadius: "8px", backgroundColor: "white", padding: "16px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+        <div style={{ position: "absolute", top: "100%", left: 0, marginTop: "8px", marginLeft: "-170px", borderRadius: "8px", backgroundColor: "white", padding: "16px", boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)" }}>
           {children}
         </div>
       )}

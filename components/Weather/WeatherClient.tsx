@@ -16,7 +16,7 @@ import {
 
 type Props = {
   forecastsList: ForecastsItem[];
-  text: string
+  text: string;
   title: string;
   imageUrl: string;
 };
@@ -117,7 +117,9 @@ export default function WeatherClient({ forecastsList, text, title, imageUrl }: 
 
 
 
-      {/* --- ライトボックス (詳細表示) --- */}
+      {/* ーーーーーーーーーーーーー
+          ライトボックス (詳細表示)
+          ーーーーーーーーーーーーー */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
@@ -168,16 +170,16 @@ export default function WeatherClient({ forecastsList, text, title, imageUrl }: 
 
               {/* メイン情報とグラフの2カラムレイアウト */}
               
-              <div style={{ backgroundColor: "rgba(255, 255, 255, 0.8)", padding: "25px", borderRadius: "30px", color: "black" }}>
+              <div style={{ backgroundColor: "rgba(255, 255, 255, 0.6)", padding: "25px", borderRadius: "30px", color: "black" }}>
 
                 <div style={{ marginBottom: "20px", display: "flex", gap: "40px" }}>
                 {/* 左：天気基本情報 */}
                   <div style={{ width: "400px" }}>
-                    <div style={{ textAlign: "center", marginBottom: "20px" }}>
+                    <div style={{ display: "flex", margin: "10px 0 20px" }}>
                       <img src={selectedFore.image.url} alt={selectedFore.image.alt} style={{ width: "120px", height: "90px" }} />
-                      <h3 style={{ fontSize: "33px", margin: "8px 0 0" }}>{selectedFore.telop}</h3>
+                      <h3 style={{ fontSize: "33px", marginLeft: "10px", display: "flex", alignItems: "center" }}>{selectedFore.telop}</h3>
                     </div>
-                    <div style={{ padding: "10px 15px", backgroundColor: "#f0f4f8", borderRadius: "20px" }}>
+                    <div style={{ padding: "10px 15px", backgroundColor: "rgba(255, 255, 255, 0.7)", borderRadius: "20px" }}>
                       <p style={{ margin: "5px 0" }}><strong>最高:</strong> <span style={{color:"red"}}>{selectedFore.temperature.max?.celsius ?? "-"}℃</span></p>
                       <p style={{ margin: "5px 0" }}><strong>最低:</strong> <span style={{color:"blue"}}>{selectedFore.temperature.min?.celsius ?? "-"}℃</span></p>
                       <hr style={{ border: "none", borderTop: "1px solid #ddd", margin: "10px 0" }} />
@@ -194,10 +196,10 @@ export default function WeatherClient({ forecastsList, text, title, imageUrl }: 
                     <h4 style={{ marginBottom: "15px", color: "#444", fontSize: "18px", borderLeft: "4px solid #007bff", paddingLeft: "10px" }}>
                       時間別 降水確率 (%)
                     </h4>
-                    <div style={{ width: "100%", height: "250px", backgroundColor: "#fafafa", borderRadius: "20px", padding: "20px 10px 10px 0" }}>
+                    <div style={{ width: "100%", height: "250px", backgroundColor: "rgba(255, 255, 255, 0.7)", borderRadius: "20px", padding: "20px 10px 10px 0" }}>
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={chartData}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+                          <CartesianGrid strokeDasharray="2 2" vertical={false} stroke="#ccc" />
                           <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{fill: "#888", fontSize: 12}} />
                           <YAxis domain={[0, 100]} axisLine={false} tickLine={false} tick={{fill: "#888", fontSize: 12}} unit="%" />
                           <Tooltip 

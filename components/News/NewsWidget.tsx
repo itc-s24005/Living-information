@@ -6,7 +6,7 @@ import NewsClient from "./NewsClient";
 
 async function newsio({ text }: { text?: string } = {}, { category }: { category?: string } = {}, { domain }: { domain?: string } = {}, { excludedomain }: { excludedomain?: string } = {}) {
   const apiKey = process.env.NEWSDATA_API_KEY!;
-  const url = `https://newsdata.io/api/1/news?apikey=${apiKey}${text}&country=jp&language=ja&removeduplicate=1${category}${domain}`;
+  const url = `https://newsdata.io/api/1/news?apikey=${apiKey}${text}&country=jp&language=ja&removeduplicate=1${category}${domain}${excludedomain}`;
 
   const res = await fetch(url, { cache: "no-store" });
   const data = await res.json();
@@ -50,8 +50,7 @@ export default async function NewsWidget() {
   const local: string = observationLocation[0]?.[0] ?? "東京";
   const newsTop = await newsio({ text: "" }, { category: "&category=top"}, { domain: "" }, {excludedomain: "&excludedomain=jp.investing.com,topics.smt.docomo.ne.jp"});
   const newsLocal = await newsio({ text: `&qInTitle=${local}` }, { category: ""}, { domain: "" }, {excludedomain: "&excludedomain=jp.investing.com,topics.smt.docomo.ne.jp"});
-  const newsList = [...newsTop];
-  const y = await Promise.all(followDomains.map((d) => newsio({ text: "" }, { category: ""},  { domain: `&domainurl=${d}` })));
+  const y = await Promise.all(followDomains.map((d) => newsio({ text: "" }, { category: ""},  { domain: `&domainurl=${d}` }, {excludedomain: ""})));
   const followDomainsList = y.flat();
 
   return (
@@ -62,7 +61,6 @@ export default async function NewsWidget() {
         wallpaperUrl={wallpaperUrl}
         newsTop={newsTop}
         newsLocal={newsLocal}
-        newsList={newsList}
         followDomainsList={followDomainsList}
       />
     </div>

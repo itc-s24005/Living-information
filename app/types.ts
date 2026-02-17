@@ -19,7 +19,6 @@ export type ForecastsItem = {
     max: { celsius: string };
   };
   image: { url: string; alt: string; };
-  // 降水確率の型を追加
   chanceOfRain: {
     T00_06: string;
     T06_12: string;
