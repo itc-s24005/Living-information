@@ -116,7 +116,7 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
             トップニュースセクション 
       ーーーーーーーーーーーーーーーー*/}
 
-      <div style={{ width: "695px", padding: "15px", height: "380px", margin: "15px 8px", border: "1px solid #808080", borderRadius: "30px", boxShadow: "0 1px 6px rgba(0,0,0,0.1)" }}>
+      <div style={{ width: "695px", padding: "15px", height: "380px", margin: "15px 8px", border: "1px solid #808080", borderRadius: "30px", boxShadow: "0 1px 6px rgba(0,0,0,0.1)", backgroundColor: "#fff" }}>
         <h1 style={{ margin: "6px", fontSize: "22px" }}>トップニュース</h1>
         <div style={{ margin: "10px 0", display: "flex", alignItems: "center"}}>
           <div style={{ width: "387px", marginRight: "16px" }}>
@@ -328,6 +328,7 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
               borderRadius: "30px",
               position: "relative",
               boxShadow: isThisHovered ? "0 2px 10px rgba(0,0,0,0.2)" : "0 1px 6px rgba(0,0,0,0.1)",
+              backgroundColor: "#fff",
             }}
             onMouseEnter={() => setHoveredIndex(news.link)}
             onMouseLeave={() => setHoveredIndex(null)}
@@ -523,7 +524,8 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
           borderRadius: "30px",
           position: "relative",
           overflow: "hidden", // 角丸を画像にも適用させるため
-          boxShadow: isThisHovered ? "0 2px 10px rgba(0,0,0,0.2)" : "0 1px 6px rgba(0,0,0,0.1)"
+          boxShadow: isThisHovered ? "0 2px 10px rgba(0,0,0,0.2)" : "0 1px 6px rgba(0,0,0,0.1)",
+          backgroundColor: "#fff",
         }}
         onMouseEnter={() => setHoveredIndex(news.link)}
         onMouseLeave={() => setHoveredIndex(null)}

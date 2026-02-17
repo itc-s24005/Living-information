@@ -55,7 +55,7 @@ export default async function NewsWidget() {
 
   return (
     <div style={{ marginTop: "18px", clear: "both" }}>
-      <h1 style={{ fontSize: "40px", color: "black" }}>最新ニュース</h1>
+    
 
       <NewsClient 
         wallpaperUrl={wallpaperUrl}

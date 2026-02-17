@@ -72,7 +72,7 @@ export default function MonthCalendar({ events, holidays }: Props) {
    * render
    * ========================= */
   return (
-    <>
+    <div style={{ padding: "20px 15px", borderRadius: "30px", backgroundColor: "#fff"}}>
       {/* 曜日 */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", fontWeight: "bold" }}>
         {["日", "月", "火", "水", "木", "金", "土"].map((d, i) => (
@@ -207,6 +207,6 @@ export default function MonthCalendar({ events, holidays }: Props) {
           </div>
         );
       })()}
-    </>
+    </div>
   );
 }
