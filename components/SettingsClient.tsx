@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ObservationLocation, LocationMaster, UserSettings } from "@/app/types";
-import { useRouter } from "next/navigation"; // 追加
 
+// デフォルト値の設定
 const defaultSettings: UserSettings = {
   showWeather: true,
   showCalendar: true,
@@ -13,35 +14,33 @@ const defaultSettings: UserSettings = {
 };
 
 export default function SettingsClient() {
-  const router = useRouter(); // 追加
+  const router = useRouter();
   const [settings, setSettings] = useState<UserSettings>(defaultSettings);
   const [locations, setLocations] = useState<LocationMaster[]>([]);
   const [saving, setSaving] = useState(false);
 
-  // モーダルを閉じる関数（URLからクエリパラメータを消す）
-  const close = () => {
-    router.push("/"); 
-  };
-
-  /* 初期値取得 */
+  /* 1. 初期データの取得 */
   useEffect(() => {
+    // ユーザー設定の取得
     fetch("/api/settings")
       .then((res) => res.json())
       .then((data) => {
-        const obs =
-          Array.isArray(data.observationLocation?.[0])
-            ? data.observationLocation
-            : data.observationLocation
-            ? [data.observationLocation]
-            : [];
+        // observationLocation の型を補正 (古いデータ形式への対策)
+        const obs = Array.isArray(data.observationLocation?.[0])
+          ? data.observationLocation
+          : data.observationLocation
+          ? [data.observationLocation]
+          : [];
 
         setSettings({
           ...defaultSettings,
           ...data,
           observationLocation: obs,
         });
-      });
+      })
+      .catch((err) => console.error("設定の取得に失敗しました:", err));
 
+    // 地域マスターデータの取得
     fetch("/list.json")
       .then((res) => res.json())
       .then((data) => {
@@ -52,10 +51,11 @@ export default function SettingsClient() {
           })
         );
         setLocations(list);
-      });
+      })
+      .catch((err) => console.error("地域データの取得に失敗しました:", err));
   }, []);
 
-  /* 共通更新 */
+  /* 2. 状態更新ハンドラー */
   const update = <K extends keyof UserSettings>(
     key: K,
     value: UserSettings[K]
@@ -63,71 +63,85 @@ export default function SettingsClient() {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
+  /* 3. 保存処理とページ遷移 */
   const save = async () => {
     setSaving(true);
-    await fetch("/api/settings", {
-      method: "PUT",
-      body: JSON.stringify(settings),
-    });
-    setSaving(false);
-    close(); // 保存後に閉じる
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+
+      if (res.ok) {
+        // サーバー側のデータを再検証し、トップページへ戻る
+        router.refresh(); 
+        router.push("/");
+      } else {
+        throw new Error("保存に失敗しました");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("設定の保存中にエラーが発生しました。");
+      setSaving(false);
+    }
   };
 
+  /* 共通スタイル定義 */
   const selectStyle: React.CSSProperties = {
     flex: 1,
-    padding: "8px",
-    borderRadius: "6px",
+    padding: "10px",
+    borderRadius: "8px",
     border: "1px solid #ddd",
     backgroundColor: "#fff",
-    fontSize: "0.9rem"
+    fontSize: "0.9rem",
+    outline: "none",
   };
 
-  // 読み込み中は空のモーダル枠だけ表示するか、nullを返す
   if (locations.length === 0) {
     return (
-      <div style={overlayStyle}>
-        <div style={modalContainerStyle}>
-          <div style={{ padding: "40px", textAlign: "center" }}>読み込み中...</div>
-        </div>
+      <div style={{ display: "flex", justifyContent: "center", padding: "50px", color: "#666" }}>
+        設定を読み込み中...
       </div>
     );
   }
 
   return (
-    <div style={overlayStyle} onClick={close}> {/* 背景クリックで閉じる */}
-      <div 
-        style={modalContainerStyle} 
-        onClick={(e) => e.stopPropagation()} // 中身クリックで閉じないようにする
-      >
-        {/* 閉じるボタン（右上） */}
-        <button 
-          onClick={close}
-          style={{
-            position: "absolute",
-            top: "16px",
-            right: "16px",
-            border: "none",
-            background: "none",
-            fontSize: "20px",
-            cursor: "pointer",
-            color: "#999"
-          }}
-        >✕</button>
+    <main>
+      <div style={{ backgroundImage: "linear-gradient(0deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4) 99%)", display: "flex", alignItems: "center", padding: "0 30px" }}>
+        <img src={"/Gemini_Generated_Image_frlcdrfrlcdrfrlc (1) (1).png"} alt={"logo"} style={{ height: "60px", margin: "20px 0"}}  />
+      </div>
+      <div style={{
+        maxWidth: 520,
+        margin: "10px auto",
+        padding: "30px",
+        backgroundColor: "#ffffff",
+        borderRadius: "16px",
+        fontFamily: "'Inter', -apple-system, sans-serif",
+        color: "#333"
+      }}>
+        <div style={{ marginBottom: "8px", padding: "5px", display: "flex", alignItems: "center", borderBottom: "2px solid #f0f0f0", }}>
+          <img src={"/gear_9208286.png"} alt="設定アイコン" style={{ height: "23px", opacity: 0.6 }}/>
+          <h2 style={{ marginLeft: "8px", fontSize: "20px", fontWeight: "bold" }}>
+            表示設定
+          </h2>
+        </div>
 
-        <h2 style={{ fontSize: "1.25rem", marginBottom: "20px", borderBottom: "2px solid #f0f0f0", paddingBottom: "10px" }}>表示設定</h2>
-
-        {/* ON/OFF (トグルスイッチ) */}
-        <div style={{ marginBottom: "24px" }}>
+        {/* --- セクション: 表示のON/OFF --- */}
+        <div style={{ marginBottom: "32px" }}>
           {(["showWeather", "showCalendar", "showNews"] as const).map((key) => (
             <label key={key} style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              padding: "10px 0",
+              padding: "12px 0",
               cursor: "pointer",
               borderBottom: "1px solid #f9f9f9"
             }}>
-              <span style={{ fontSize: "0.95rem", fontWeight: 500 }}>{key}</span>
+              <span style={{ fontSize: "1rem", fontWeight: 500 }}>
+                {key === "showWeather" ? "天気を表示" : key === "showCalendar" ? "カレンダーを表示" : "ニュースを表示"}
+              </span>
+              
               <div style={{ position: "relative" }}>
                 <input
                   type="checkbox"
@@ -135,41 +149,45 @@ export default function SettingsClient() {
                   onChange={(e) => update(key, e.target.checked)}
                   style={{ display: "none" }}
                 />
+                {/* スイッチ背景 */}
                 <div style={{
-                  width: "44px",
-                  height: "24px",
-                  backgroundColor: settings[key] ? "#3983f3ff" : "#e0e0e0",
-                  borderRadius: "12px",
-                  transition: "background-color 0.2s ease",
+                  width: "48px",
+                  height: "26px",
+                  backgroundColor: settings[key] ? "#3983f3" : "#e0e0e0",
+                  borderRadius: "13px",
+                  transition: "background-color 0.25s ease",
                 }} />
+                {/* スイッチノブ */}
                 <div style={{
                   position: "absolute",
-                  top: "2px",
-                  left: settings[key] ? "22px" : "2px",
+                  top: "3px",
+                  left: settings[key] ? "25px" : "3px",
                   width: "20px",
                   height: "20px",
                   backgroundColor: "#fff",
                   borderRadius: "50%",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                  transition: "left 0.2s ease",
+                  boxShadow: "0 2px 5px rgba(0,0,0,0.15)",
+                  transition: "left 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)",
                 }} />
               </div>
             </label>
           ))}
         </div>
 
-        {/* 観測地 */}
-        <h3 style={{ fontSize: "1rem", color: "#666", marginBottom: "12px" }}>観測地</h3>
-        <div style={{ maxHeight: "200px", overflowY: "auto" }}> {/* 観測地が多い場合を想定 */}
+        {/* --- セクション: 観測地 --- */}
+        <div style={{ marginBottom: "32px" }}>
+          <h3 style={{ fontSize: "1.1rem", color: "#666", marginBottom: "16px", fontWeight: 600 }}>観測地の設定</h3>
           {settings.observationLocation.map((loc, idx) => (
             <div key={idx} style={{
               display: "flex",
-              gap: "8px",
+              gap: "10px",
               marginBottom: "12px",
-              padding: "12px",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "8px"
+              padding: "16px",
+              backgroundColor: "#f8faff",
+              borderRadius: "12px",
+              border: "1px solid #eef2ff"
             }}>
+              {/* 都道府県選択 */}
               <select
                 value={loc[0]}
                 onChange={(e) => {
@@ -187,6 +205,7 @@ export default function SettingsClient() {
                 ))}
               </select>
 
+              {/* 市区町村選択 */}
               <select
                 value={loc[1]}
                 onChange={(e) => {
@@ -205,93 +224,94 @@ export default function SettingsClient() {
           ))}
         </div>
 
-        {/* フォローメディア */}
-        <h3 style={{ fontSize: "1rem", color: "#666", marginTop: "24px", marginBottom: "12px" }}>フォローメディア</h3>
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          {settings.followMedia.map((m, i) => (
-            <div key={i} style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "8px 12px",
-              backgroundColor: "#fff",
-              border: "1px solid #eee",
-              borderRadius: "8px",
-            }}>
-              {m.icon ? (
-                <img src={m.icon} alt={m.name} width={28} height={28} style={{ borderRadius: "6px" }} />
-              ) : (
-                <div style={{ width: 28, height: 28, backgroundColor: "#eee", borderRadius: "6px" }} />
-              )}
-              <span style={{ fontSize: "0.9rem", flex: 1 }}>{m.name}</span>
-              <button
-                onClick={() => update("followMedia", settings.followMedia.filter((_, idx) => idx !== i))}
-                style={{
-                  backgroundColor: "transparent",
-                  border: "none",
-                  color: "#ff4d4f",
-                  cursor: "pointer",
-                  fontSize: "0.85rem",
-                  padding: "4px 8px"
-                }}
-              >
-                フォローを外す
-              </button>
-            </div>
-          ))}
+        {/* --- セクション: フォローメディア --- */}
+        <div style={{ marginBottom: "32px" }}>
+          <h3 style={{ fontSize: "1.1rem", color: "#666", marginBottom: "16px", fontWeight: 600 }}>フォローメディア</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {settings.followMedia.length > 0 ? (
+              settings.followMedia.map((m, i) => (
+                <div key={i} style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "10px 15px",
+                  backgroundColor: "#fff",
+                  border: "1px solid #eee",
+                  borderRadius: "10px",
+                }}>
+                  {m.icon ? (
+                    <img src={m.icon} alt={m.name} width={30} height={30} style={{ borderRadius: "50%" }} />
+                  ) : (
+                    <div style={{ width: 30, height: 30, backgroundColor: "#f0f0f0", borderRadius: "50%" }} />
+                  )}
+                  <span style={{ fontSize: "0.95rem", flex: 1, fontWeight: 500 }}>{m.name}</span>
+                  <button
+                    onClick={() => update("followMedia", settings.followMedia.filter((_, idx) => idx !== i))}
+                    style={{
+                      backgroundColor: "#fff0f0",
+                      border: "none",
+                      color: "#ff4d4f",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      padding: "6px 12px",
+                      borderRadius: "6px",
+                      fontWeight: 500
+                    }}
+                  >
+                    解除
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p style={{ fontSize: "0.9rem", color: "#999", textAlign: "center", padding: "10px" }}>
+                フォローしているメディアはありません
+              </p>
+            )}
+          </div>
         </div>
 
-        {/* 保存ボタン */}
+        {/* --- 保存ボタン --- */}
         <button
           onClick={save}
           disabled={saving}
           style={{
             width: "100%",
-            marginTop: "32px",
-            padding: "12px",
-            backgroundColor: saving ? "#ccc" : "#3983f3ff",
+            padding: "16px",
+            backgroundColor: saving ? "#a5c7f9" : "#3983f3",
             color: "#fff",
             border: "none",
-            borderRadius: "8px",
-            fontSize: "1rem",
+            borderRadius: "12px",
+            fontSize: "1.1rem",
             fontWeight: "bold",
             cursor: saving ? "not-allowed" : "pointer",
-            transition: "transform 0.1s"
+            boxShadow: "0 4px 14px rgba(57, 131, 243, 0.3)",
+            transition: "all 0.2s ease"
           }}
-          onMouseDown={(e) => (e.currentTarget.style.transform = "translateY(2px)")}
-          onMouseUp={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+          onMouseEnter={(e) => !saving && (e.currentTarget.style.backgroundColor = "#2a72e5")}
+          onMouseLeave={(e) => !saving && (e.currentTarget.style.backgroundColor = "#3983f3")}
+          onMouseDown={(e) => !saving && (e.currentTarget.style.transform = "scale(0.98)")}
+          onMouseUp={(e) => !saving && (e.currentTarget.style.transform = "scale(1)")}
         >
-          {saving ? "保存中..." : "設定を保存"}
+          {saving ? "設定を保存中..." : "設定を保存して戻る"}
+        </button>
+
+        <button
+          onClick={() => router.push("/")}
+          style={{
+            width: "100%",
+            marginTop: "12px",
+            padding: "10px",
+            backgroundColor: "transparent",
+            color: "#888",
+            border: "none",
+            fontSize: "0.9rem",
+            cursor: "pointer",
+            textDecoration: "underline"
+          }}
+        >
+          保存せずに戻る
         </button>
       </div>
-    </div>
+  </main>
   );
 }
-
-// モーダル用の追加スタイル
-const overlayStyle: React.CSSProperties = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100vw",
-  height: "100vh",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  zIndex: 10000,
-  backdropFilter: "blur(4px)" // 背景を少しぼかすと高級感が出ます
-};
-
-const modalContainerStyle: React.CSSProperties = {
-  position: "relative",
-  width: "90%",
-  maxWidth: 480,
-  maxHeight: "90vh",
-  overflowY: "auto",
-  padding: "24px",
-  backgroundColor: "#ffffff",
-  borderRadius: "16px",
-  boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
-  fontFamily: "'Helvetica Neue', Arial, sans-serif",
-};

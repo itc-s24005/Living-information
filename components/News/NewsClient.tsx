@@ -116,7 +116,7 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
             トップニュースセクション 
       ーーーーーーーーーーーーーーーー*/}
 
-      <div style={{ width: "695px", padding: "15px", height: "380px", margin: "15px 8px", border: "1px solid #808080", borderRadius: "30px", boxShadow: "0 1px 6px rgba(0,0,0,0.1)", backgroundColor: "#fff" }}>
+      <div style={{ width: "695px", padding: "15px", height: "380px", margin: "15px 8px", borderRadius: "30px", boxShadow: "0 2px 5px rgba(0,0,0,0.3)", backgroundColor: "#fff" }}>
         <h1 style={{ margin: "6px", fontSize: "22px" }}>トップニュース</h1>
         <div style={{ margin: "10px 0", display: "flex", alignItems: "center"}}>
           <div style={{ width: "387px", marginRight: "16px" }}>
@@ -165,12 +165,11 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
         width: "695px",
         height: "380px",
         margin: "15px 8px",
-        border: "1px solid #808080",
         borderRadius: "30px",
         overflow: "hidden", // 重要: はみ出たスライドを隠す
         position: "relative", // 重要: 子要素の絶対配置の基準点となる
         backgroundColor: "#000", // 画像ロード前の背景色
-        boxShadow: "0 1px 6px rgba(0,0,0,0.1)"
+        boxShadow: "0 2px 5px rgba(0,0,0,0.3)"
       }}
     >
       {/* スライドを横に並べて動かすトラック部分 */}
@@ -324,10 +323,9 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
               margin: "15px 8px",
               width: "339.5px",
               height: "380px",
-              border: "0.1px solid #808080",
               borderRadius: "30px",
               position: "relative",
-              boxShadow: isThisHovered ? "0 2px 10px rgba(0,0,0,0.2)" : "0 1px 6px rgba(0,0,0,0.1)",
+              boxShadow: isThisHovered ? "0 3px 10px rgba(0,0,0,0.4)" : "0 2px 5px rgba(0,0,0,0.3)",
               backgroundColor: "#fff",
             }}
             onMouseEnter={() => setHoveredIndex(news.link)}
@@ -429,7 +427,6 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
           margin: "15px 8px",
           width: "695px", // カード形式と幅を合わせる場合
           height: "380px", // カード形式と高さを合わせる場合
-          border: "1px solid #808080",
           borderRadius: "30px",
           position: "relative",
           overflow: "hidden", // 画像のはみ出しを防ぐ
@@ -451,7 +448,7 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
                 height: "100%",
                 objectFit: "cover",
                 display: "block",
-                boxShadow: "0 1px 6px rgba(0,0,0,0.1)",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
                 filter: isThisHovered ? "brightness(0.8)" : "none"
               }}
               onMouseEnter={() => setHoveredIndex(news.link)}
@@ -520,11 +517,10 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
           margin: "15px 8px",
           width: "339.5px",
           height: "380px",
-          border: "1px solid #808080",
           borderRadius: "30px",
           position: "relative",
           overflow: "hidden", // 角丸を画像にも適用させるため
-          boxShadow: isThisHovered ? "0 2px 10px rgba(0,0,0,0.2)" : "0 1px 6px rgba(0,0,0,0.1)",
+          boxShadow: isThisHovered ? "0 3px 10px rgba(0,0,0,0.4)" : "0 2px 5px rgba(0,0,0,0.3)",
           backgroundColor: "#fff",
         }}
         onMouseEnter={() => setHoveredIndex(news.link)}

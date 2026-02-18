@@ -7,8 +7,7 @@ import GmailBadge from "@/components/GmailBadge";
 import News from "@/components/News/NewsWidget";
 import Weather from "@/components/Weather/WeatherWidget"
 import Popover from "@/components/Popover/Popover";
-import Link from "next/link"; // 追加
-import SettingsClient from "@/components/SettingsClient";
+
 
 export const dynamic = "force-dynamic";
 
@@ -43,8 +42,6 @@ export default async function Page({
   const res2 = await fetch(url2, { cache: "no-cache" });
   const data2 = await res2.json();
 
-  const params = await searchParams;
-  const isSettingsOpen = params.settings === "open";
 
   return (
     <main>
@@ -69,27 +66,44 @@ export default async function Page({
         <img src={"/Gemini_Generated_Image_frlcdrfrlcdrfrlc (1) (1).png"} alt={"logo"} style={{ height: "60px", margin: "20px 0"}} />
         <div style={{ display: "flex", gap: 8, alignItems: "center", margin: "0 0 0 auto", }}>
           
-          <Popover trigger={<img src={user?.avatarUrl ?? "https://via.placeholder.com/48"} alt={"icon"} style={{ marginRight: "30px", width: "40px", marginLeft: "10px", borderRadius: "50%", cursor: "pointer"}} />}>
+           <Popover trigger={<img src={user?.avatarUrl ?? "https://via.placeholder.com/48"} alt={"icon"} style={{ marginRight: "30px", width: "40px", marginLeft: "10px", borderRadius: "50%", cursor: "pointer"}} />}>
+
             <div style={{ textAlign: "center", width: "300px" }}>
-              <img src={user?.avatarUrl ?? "https://via.placeholder.com/48"} alt={"icon"} style={{ margin: "auto", width: "60px", borderRadius: "50%", cursor: "pointer"}} />
-              <p style={{ margin: "8px 0 0", color: "black", fontSize: "25px" }}>{user?.name}</p>
-              <p style={{ fontSize: "12px", color: "#666666" }}>{user?.email}</p>
+
               
-              {/* hrefをクエリパラメータに変更し、Linkコンポーネントを使う */}
-              <Link href="?settings=open" style={{ display: "block", margin: "12px 15px", padding: "10px", fontSize: "14px", backgroundColor: "#cfcfcfff", color: "black", textDecoration: "none", borderRadius: "40px" }}>
+
+              <img src={user?.avatarUrl ?? "https://via.placeholder.com/48"} alt={"icon"} style={{ margin: "auto", width: "60px", borderRadius: "50%", cursor: "pointer"}} />
+
+              <p style={{ margin: "8px 0 0", color: "black", fontSize: "25px" }}>{user?.name}</p>
+
+              <p style={{ fontSize: "12px", color: "#666666" }}>{user?.email}</p>
+
+              <a href="/settings" style={{ display: "block", margin: "12px 15px", padding: "10px", fontSize: "14px", backgroundColor: "#cfcfcfff", color: "black", textDecoration: "none", borderRadius: "40px" }}>
+
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                  <img src={"/gear_9208286.png"} alt="設定" style={{ marginRight: "8px", height: "20px"}}/>
+
+                  <img src={"/gear_9208286.png"} alt="設定アイコン" style={{ marginRight: "8px", height: "20px"}}/>
+
                   設定
+
                 </div>
-              </Link>
+
+              </a>
 
               <a href="/api/logout" style={{ display: "block", margin: "12px 15px", padding: "10px", fontSize: "14px", backgroundColor: "#cfcfcfff", color: "black", textDecoration: "none", borderRadius: "40px" }}>
+
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                  <img src={"/logout_8669140.png"} alt="ログアウト" style={{ marginRight: "8px", height: "20px"}}/>
+
+                  <img src={"/logout_8669140.png"} alt="ログアウトアイコン" style={{ marginRight: "8px", height: "20px"}}/>
+
                   ログアウト
+
                 </div>
+
               </a>
+
             </div>
+
           </Popover>
           <a href="https://accounts.google.com/ServiceLogin?hl=ja&service=mail" style={{ display: "flex", gap: 8, alignItems: "center", margin: "0 0 0 auto" }}>
             <img src={"https://illustcenter.com/wp-content/uploads/2022/06/mailicon01.png"} alt={"mail icon"} style={{ width: "54px", height: "40px", paddingRight: "-10px"}} />
@@ -146,7 +160,6 @@ export default async function Page({
 
         {user?.settings?.showNews && (<News /> )}
       </div>
-      {isSettingsOpen && <SettingsClient />}
     </main>
     
   );
