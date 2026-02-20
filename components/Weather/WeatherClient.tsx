@@ -43,7 +43,7 @@ export default function WeatherClient({ forecastsList, text, title, imageUrl }: 
       <div
         onClick={() => setIsOpen(true)}
         style={{
-          minWidth: "1779px",
+          maxWidth: "1779px",
           margin: "25px 0 30px",
           padding: "22px 30px",
           borderRadius: "30px",
@@ -63,9 +63,9 @@ export default function WeatherClient({ forecastsList, text, title, imageUrl }: 
           <p style={{ fontSize: "25px", color: "#fff", textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}>
             {title}
           </p>
-          <div style={{ display: "flex", gap: "20px", color: "Black" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", color: "Black" }}>
             <div style={{ 
-                padding: "15px 18px", margin: "15px 18px", minWidth: "630px",
+                padding: "15px", margin: "15px", minWidth: "630px",
                 backgroundColor: "rgba(255, 255, 255, 0.35)", borderRadius: "30px",
               }}>
                 <h3 style={{ fontSize: "22px" }}>{forecastsList[0].dateLabel}</h3>
@@ -93,7 +93,7 @@ export default function WeatherClient({ forecastsList, text, title, imageUrl }: 
 
             {forecastsList.slice(1).map((fore) => (
               <div key={fore.date} style={{
-                padding: "15px 18px", margin: "15px 18px", width: "380px",
+                padding: "15px", margin: "15px", width: "320px",
                 backgroundColor: "rgba(255, 255, 255, 0.35)", borderRadius: "30px",
               }}>
                 <h3 style={{ fontSize: "22px" }}>{fore.dateLabel}</h3>

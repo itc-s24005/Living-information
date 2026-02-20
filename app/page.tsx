@@ -58,52 +58,32 @@ export default async function Page({
           zIndex: -1,
           objectFit: "cover",
           filter: "brightness(0.9)",
-          WebkitMaskImage: 'linear-gradient(180deg, #ffffff, #ffffff90 80%, transparent)',
-          maskImage: 'linear-gradient(180deg, #ffffff, #ffffff90 80%, transparent)'
+          WebkitMaskImage: 'linear-gradient(180deg, #ffffff, #ffffff95 82%, transparent)',
+          maskImage: 'linear-gradient(180deg, #ffffff, #ffffff95 82%, transparent)'
         }}
       />
-      <div style={{ backgroundImage: "linear-gradient(0deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4) 99%)", display: "flex", alignItems: "center", marginBottom: "150px", padding: "0 30px" }}>
+      <div style={{ backgroundImage: "linear-gradient(0deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.45) 90%)", display: "flex", alignItems: "center", marginBottom: "150px", padding: "0 30px" }}>
         <img src={"/Gemini_Generated_Image_frlcdrfrlcdrfrlc (1) (1).png"} alt={"logo"} style={{ height: "60px", margin: "20px 0"}} />
         <div style={{ display: "flex", gap: 8, alignItems: "center", margin: "0 0 0 auto", }}>
-          
            <Popover trigger={<img src={user?.avatarUrl ?? "https://via.placeholder.com/48"} alt={"icon"} style={{ marginRight: "30px", width: "40px", marginLeft: "10px", borderRadius: "50%", cursor: "pointer"}} />}>
-
             <div style={{ textAlign: "center", width: "300px" }}>
-
-              
-
               <img src={user?.avatarUrl ?? "https://via.placeholder.com/48"} alt={"icon"} style={{ margin: "auto", width: "60px", borderRadius: "50%", cursor: "pointer"}} />
-
               <p style={{ margin: "8px 0 0", color: "black", fontSize: "25px" }}>{user?.name}</p>
-
               <p style={{ fontSize: "12px", color: "#666666" }}>{user?.email}</p>
-
               <a href="/settings" style={{ display: "block", margin: "12px 15px", padding: "10px", fontSize: "14px", backgroundColor: "#cfcfcfff", color: "black", textDecoration: "none", borderRadius: "40px" }}>
-
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-
                   <img src={"/gear_9208286.png"} alt="設定アイコン" style={{ marginRight: "8px", height: "20px"}}/>
-
                   設定
-
                 </div>
-
               </a>
 
               <a href="/api/logout" style={{ display: "block", margin: "12px 15px", padding: "10px", fontSize: "14px", backgroundColor: "#cfcfcfff", color: "black", textDecoration: "none", borderRadius: "40px" }}>
-
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-
                   <img src={"/logout_8669140.png"} alt="ログアウトアイコン" style={{ marginRight: "8px", height: "20px"}}/>
-
                   ログアウト
-
                 </div>
-
               </a>
-
             </div>
-
           </Popover>
           <a href="https://accounts.google.com/ServiceLogin?hl=ja&service=mail" style={{ display: "flex", gap: 8, alignItems: "center", margin: "0 0 0 auto" }}>
             <img src={"https://illustcenter.com/wp-content/uploads/2022/06/mailicon01.png"} alt={"mail icon"} style={{ width: "54px", height: "40px", paddingRight: "-10px"}} />

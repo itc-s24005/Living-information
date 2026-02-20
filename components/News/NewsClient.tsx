@@ -225,7 +225,7 @@ export default function NewsClient({ wallpaperUrl, newsTop, newsLocal, followDom
                 />
               ) : (
                 // 画像がない場合のダミー表示
-                 <div style={{width: "100%", height: "100%", backgroundColor: "#333"}} />
+                 <img src="/news.jpg" style={{width: "100%", height: "100%" }} />
               )}
 
               {/* --- 2. メディアアイコン、タイトルを画像の上に重ねて下側に表示 --- */}
