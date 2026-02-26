@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 生活情報アプリ
+## 概要
+メールの未読通知やカレンダー、天気、ニュースなどの生活情報を一括で取得・表示することができるアプリです
+※作成にはChatGPTを使用しました  
+  
+[**アプリはこちら**](https://living-information-demo.vercel.app/)  
+! 注意 !  
+上記のリンクからアクセスできるサイトはあくまで"デモ用のサイト"です。実際のサイトだとグーグル認証とデータベースによるユーザー情報・設定情報の管理が必要なため、セキュリティの観点からグーグル認証・データベース管理なしで接続できるデモ用をご用意しました。　　
+デモ用ではログイン機能がない他、グーグル認証・データベース管理がないため、未読通知・カレンダーの予定・天気情報の取得場所・ローカルニュースを取得する地域・フォローしたメディアは事前に用意した仮データを元に表示しています。フォローボタンと設定ページにつきましては、動作はしますが機能いたしませんのでご了承ください。なお、本番のページは[こちら](https://living-information.vercel.app/)です。
+## 使用技術
+* Next.js
+* Supabase
+* OAuth 2.0
+* Prisma
+* Recharts
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 使用API
+[天気予報API](https://weather.tsukumijima.net/)  
+天気予報を取得できる  
+  
+[Google Calendar API](https://developers.google.com/workspace/calendar/api/guides/overview?hl=ja)  
+グーグルカレンダーの予定を取得できる  
+  
+[Gmail API](https://developers.google.com/workspace/gmail/api/guides?hl=ja)  
+Gmailの未読件数などを取得できる  
+  
+[Holidays jp API](https://holidays-jp.github.io/)  
+日本の祝日を取得できる  
+  
+[今日はなんの日API](https://www.whatistoday.cyou/index.cgi/)  
+今日の記念日を取得できる  
+  
+[NEWSDATA.IO](https://newsdata.io/news-sources/japan-news-api)  
+様々なニュース記事を取得できる  
+  
+[Bing API](https://37jotter.wordpress.com/2019/03/21/bing-wallpaper-flow/)  
+Bingで使用される日替わりの背景画像を取得できる  
+  
+## 使用データベース  
+[Supabase](https://supabase.com/)  
+## 製作期間
+約40日ほど
